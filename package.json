@@ -1,0 +1,22 @@
+{
+  "name": "vivatech-leboncoin-2018-deamon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muhammaddadu/vivatech-leboncoin-2018-deamon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/muhammaddadu/vivatech-leboncoin-2018-deamon/issues"
+  },
+  "homepage": "https://github.com/muhammaddadu/vivatech-leboncoin-2018-deamon#readme",
+  "dependencies": {
+    "web3": "^1.0.0-beta.34"
+  }
+}
