@@ -1,6 +1,8 @@
 # Vivatech LebonCoin 2018 Deamon
 > Deamon that watches a smart contract and executes IoT commands
 
+This project works in conjunction with the following (DAPP)[https://github.com/muhammaddadu/vivatech-leboncoin-2018-webapp/].
+
 ## Requirements
 
 - Raspberry Pi
