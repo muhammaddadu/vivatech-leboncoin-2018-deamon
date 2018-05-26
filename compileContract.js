@@ -13,8 +13,9 @@ fs.writeFileSync(path.join(__dirname, 'smartcontracts/Box.compiled.json'), JSON.
 const ProductSource = fs.readFileSync(path.join(__dirname, 'smartcontracts/Product.sol'), 'utf8');
 const ProductCompiled = solc.compile({
     sources: {
-        'BoxSource.sol': BoxSource,
-        'ProductSource.sol': ProductSource
+        'Contract.sol': ProductSource,
+        'BoxSource.sol': BoxSource
     }
-}, 1).contracts['ProductSource.sol:Product'];
+}, 1).contracts;
+console.log(ProductCompiled);
 fs.writeFileSync(path.join(__dirname, 'smartcontracts/Product.compiled.json'), JSON.stringify(ProductCompiled));

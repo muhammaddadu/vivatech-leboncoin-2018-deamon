@@ -17,6 +17,7 @@ const Contract = web3.eth.contract(JSON.parse(BoxCompiled.interface));
 const myContract = Contract.at(CONTRACT_ADDRESS);
 
 var shouldRun = true;
+var lockStatus = false;
 
 function watchContractAtAddress() {
     let contractFields = ['owner', 'pricePerDay', 'lat', 'long', 'productContract', 'getStatus'];
@@ -44,14 +45,22 @@ function watchContractAtAddress() {
         switch (data.getStatus) {
             case '0': // AVAILABLE
             case '2': // UNLOCKED
-                piblaster.setPwm(17, 0.05);
+                if (lockStatus !== 'unlocked') {
+                    piblaster.setPwm(17, 0.05);
+                    lockStatus = 'unlocked';
+                }
                 break;
             case '1': // Locked
-                piblaster.setPwm(17, 0.145);
+                if (lockStatus !== 'locked') {
+                    piblaster.setPwm(17, 0.145);
+                    lockStatus = 'locked';
+                }
                 break;
         }
 
-        shouldRun = true;
+        setTimeout(() => {
+            shouldRun = true;
+        }, 1000);
     });
 }
 
