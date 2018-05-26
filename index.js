@@ -12,7 +12,7 @@ const piblaster = require('pi-blaster.js');
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
 
-const BoxSource = fs.readFileSync(path.join(__dirname, 'smartcontracts/Box.sol'), 'utf8');
+// const BoxSource = fs.readFileSync(path.join(__dirname, 'smartcontracts/Box.sol'), 'utf8');
 // const BoxCompiled = solc.compile({
 //     sources: {
 //         'BoxSource.sol': BoxSource
@@ -21,10 +21,13 @@ const BoxSource = fs.readFileSync(path.join(__dirname, 'smartcontracts/Box.sol')
 const BoxCompiled = require('./smartcontracts/Box.compiled.json');
 const Contract = web3.eth.contract(JSON.parse(BoxCompiled.interface));
 
+const myContract = Contract.at(CONTRACT_ADDRESS);
+
 fs.writeFileSync(path.join(__dirname, 'smartcontracts/Box.compiled.json'), JSON.stringify(BoxCompiled));
 
-function watchContractAtAddress(contractAddress) {
-    let myContract = Contract.at(contractAddress);
+var shouldRun = true;
+
+function watchContractAtAddress() {
     let contractFields = ['owner', 'pricePerDay', 'lat', 'long', 'productContract', 'getStatus'];
     let responsesWanted = contractFields.length;
 
@@ -41,7 +44,7 @@ function watchContractAtAddress(contractAddress) {
         });
     }, function () {
         setTimeout(() => {
-            watchContractAtAddress(CONTRACT_ADDRESS);
+            watchContractAtAddress();
         }, 1000);
 
         let data = JSON.parse(JSON.stringify(_data));
@@ -56,9 +59,16 @@ function watchContractAtAddress(contractAddress) {
                 piblaster.setPwm(17, 0.145);
                 break;
         }
+
+        shouldRun = true;
     });
 }
 
-watchContractAtAddress(CONTRACT_ADDRESS);
+setInterval(() => {
+    if (shouldRun) {
+        shouldRun = false;
+        watchContractAtAddress();
+    }
+}, 2000);
 
 process.stdin.resume();
