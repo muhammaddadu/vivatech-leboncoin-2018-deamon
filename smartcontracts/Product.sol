@@ -8,7 +8,8 @@ contract Product {
   string public name;
   uint public price; // in wei?
   // string dimentions; // L*W*H in cm
-  string public adsURL;
+  string public image;
+  string public description;
   address public boxContract;
   Box boxContr;
   
@@ -18,7 +19,8 @@ contract Product {
   constructor(
     string _name,
     uint _price,
-    string _adsURL,
+    string _image,
+    string _description,
     address _boxContract
   ) public {
     owner = msg.sender;
@@ -26,7 +28,8 @@ contract Product {
     // to do: add parameters and assign them to members
     name = _name;
     price = _price;
-    adsURL = _adsURL;
+    image = _image;
+    description = _description;
     boxContract = _boxContract;
   }
 
