@@ -6,6 +6,8 @@ const CONTRACT_ADDRESS = '0xc789bc784db54ef91a0d3e051986f61e3367a57a';
 const NODE_PRIVATE_KEY = '588bab92cce6d95af7207b248f799907849e86dbe00f27a6870aa6a47430b5ed';
 const NODE_PUBLIC_KEY = '0xA7387feCcA51130A0F117C9cEec18287390E2bF2';
 
+const piblaster = require('pi-blaster.js');
+
 // const solc = require('solc');
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
@@ -44,14 +46,14 @@ function watchContractAtAddress(contractAddress) {
 
         let data = JSON.parse(JSON.stringify(_data));
         console.log(data);
-        
+
         switch (data.getStatus) {
             case '0': // AVAILABLE
             case '2': // UNLOCKED
-
+                piblaster.setPwm(17, 0.05);
                 break;
             case '1': // Locked
-
+                piblaster.setPwm(17, 0.145);
                 break;
         }
     });
