@@ -3,8 +3,8 @@ const Database = artifacts.require("Database.sol");
 contract('Database', async (accounts) => {
 
   // BOXes part
+  let sampleBox = 111222333;
   it("simple test with boxes", async () => {
-    let sampleBox = 111222333;
     let instance = await Database.new();
 
     var count = 0;
@@ -22,6 +22,18 @@ contract('Database', async (accounts) => {
       (await instance.getBoxIndex(sampleBox+1)).valueOf();
       console.log("Shouldn't be displayed!");
     } catch {}
+  })
+
+  it("delete a box", async () => {
+    let instance = await Database.new();
+    await instance.addBox(sampleBox);
+    await instance.addBox(sampleBox+1);
+
+    let count = (await instance.getBoxCount()).valueOf();
+    let index = (await instance.getBoxIndex(sampleBox)).valueOf();
+
+    (await instance.deleteBoxByIndex(index, sampleBox)).valueOf()
+    assert.equal(count-1, (await instance.getBoxCount()).valueOf());
   })
 
   // PRODUCTs part

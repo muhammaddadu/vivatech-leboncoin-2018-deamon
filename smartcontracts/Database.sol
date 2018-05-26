@@ -23,6 +23,15 @@ contract Database {
     revert();
   }
 
+  // smart way of deleting objects: find the object with getBoxIndex, then deleteBoxByIndex
+  function deleteBoxByIndex(uint index, address boxContract) public returns(bool) {
+    // to do: check if sender is the owner of the box
+    require(boxContract == allBoxes[index]);
+    delete allBoxes[index];
+    allBoxes.length--;
+    return true;
+  }
+
   // PRODUCTs part
   function addProduct(address productContract) public {
     allProducts.push(productContract); 
@@ -40,5 +49,14 @@ contract Database {
       }
     }
     revert();
+  }
+
+  // smart way of deleting objects: find the object with getProductIndex, then deleteProductByIndex
+  function deleteProductByIndex(uint index, address productContract) public returns(bool) {
+    // to do: check if sender is the seller or the buyer in the deal
+    require(productContract == allProducts[index]);
+    delete allProducts[index];
+    allProducts.length--;
+    return true;
   }
 }

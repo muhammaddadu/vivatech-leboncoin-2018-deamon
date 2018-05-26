@@ -29,8 +29,16 @@ contract Box {
     if (msg.sender == owner) _;
   }
 
-  function update() public restricted returns (bool) {
-    // copy from constructor
+  function update(
+    uint _pricePerDay,
+    int _lat,
+    int _long
+  ) public restricted returns (bool) {
+    // changes allowed when the box is not occupied
+    require(status == state.AVAILABLE);
+    pricePerDay = _pricePerDay;
+    lat = _lat;
+    long = _long;
     return true;
   }
 

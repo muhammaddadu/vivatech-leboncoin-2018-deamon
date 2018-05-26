@@ -8,8 +8,7 @@ contract Product {
   string public name;
   uint public price; // in wei?
   // string dimentions; // L*W*H in cm
-  string public image;
-  string public description;
+  string public adsURL;
   address public boxContract;
   Box boxContr;
   
@@ -19,17 +18,14 @@ contract Product {
   constructor(
     string _name,
     uint _price,
-    string _image,
-    string _description,
+    string _adsURL,
     address _boxContract
   ) public {
     owner = msg.sender;
     status = state.NOTINBOX;
-    // to do: add parameters and assign them to members
     name = _name;
     price = _price;
-    image = _image;
-    description = _description;
+    adsURL = _adsURL;
     boxContract = _boxContract;
   }
 
@@ -37,8 +33,14 @@ contract Product {
     if (msg.sender == owner) _;
   }
 
-  function update() public restricted returns (bool) {
-    // copy from constructor
+  function update(
+    string _name,
+    uint _price,
+    string _adsURL
+  ) public restricted returns (bool) {
+    name = _name;
+    price = _price;
+    adsURL = _adsURL;
     return true;
   }
 
@@ -50,7 +52,7 @@ contract Product {
     status = _status;
   }
 
-  // cancel and release the goods from the box
+  // buy and release the goods from the box
   function buy() public payable {
     // check status
     require(status == state.INBOX);
@@ -58,25 +60,18 @@ contract Product {
     require(price == msg.value);
 
     buyer = msg.sender;
-    // check if the calling user is authirised or the status of product contract?
-    // require(productContract == msg.sender);
     boxContract = 0;
-    // status = state.UNLOCKED; // ???
     status = state.SOLD;
     // unlock the box
     boxContr = Box(boxContract);
     return boxContr.release();
-  
   }
 
   // cancel and release the goods from the box
   function cancel() public restricted {
     // check status
     require(status == state.INBOX);
-    // check if the calling user is authirised or the status of product contract?
-    // require(productContract == msg.sender);
     boxContract = 0;
-    // status = state.UNLOCKED; // ???
     status = state.NOTINBOX;
     // unlock the box
     boxContr = Box(boxContract);

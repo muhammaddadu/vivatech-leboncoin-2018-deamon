@@ -11,6 +11,7 @@ contract('Product', async (accounts) => {
 
   it("simple test", async () => {
     let instance = await Product.new("Product 1", 1000000, "https://leboncoin.fr/", 0);
+    // let instance = await Box.new({from: accounts[0]});
 
     assert.equal(state.NOTINBOX, (await instance.getStatus()).valueOf());
 

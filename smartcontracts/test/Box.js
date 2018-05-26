@@ -10,6 +10,7 @@ contract('Box', async (accounts) => {
 
   it("simple test", async () => {
     let instance = await Box.new(1000000, 48*10000, 9*10000, "40*30*30");
+    // let instance = await Box.new({from: accounts[0]});
 
     assert.equal(state.AVAILABLE, (await instance.getStatus()).valueOf());
 
@@ -27,6 +28,10 @@ contract('Box', async (accounts) => {
     
     await instance.release();
     assert.equal(state.AVAILABLE, (await instance.getStatus()).valueOf());
+/*
+    instance.transfer(accounts[2], 50, {from: accounts[1]});
+    assert.equal(50, (await instance.balanceOf(accounts[1])).valueOf());
+*/
   });
 
   it("releasing", async () => {
