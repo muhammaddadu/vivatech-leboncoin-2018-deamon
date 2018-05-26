@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const async = require('async');
 const WEB3_PROVIDER = 'https://ropsten.infura.io/';
-const CONTRACT_ADDRESS = '0xc164c61a94ed91d56f2f63c0dc870bad923399b5';
+const CONTRACT_ADDRESS = '0xc789bc784db54ef91a0d3e051986f61e3367a57a';
 const NODE_PRIVATE_KEY = '588bab92cce6d95af7207b248f799907849e86dbe00f27a6870aa6a47430b5ed';
 const NODE_PUBLIC_KEY = '0xA7387feCcA51130A0F117C9cEec18287390E2bF2';
 
@@ -26,21 +27,30 @@ function watchContractAtAddress(contractAddress) {
 
     let data = {};
 
-    console.log(Object.keys(myContract));
-
-    contractFields.forEach((key) => {
-        console.log(key);
+    async.forEach(contractFields, (key, done) => {
         myContract[key]((err, value) => {
             if (err) {
-                alert(err);
+                console.error(err);
             }
 
             data[key] = value;
-            responsesWanted--;
+            done();
         });
-    });
+    }, function () {
+        setTimeout(() => {
+            watchContractAtAddress();
+        }, 1000);
+        
+        switch (data.getStatus) {
+            case '0': // AVAILABLE
+            case '2': // UNLOCKED
 
-    console.log(data);
+                break;
+            case '1': // Locked
+                
+                break;
+        }
+    });
 }
 
 watchContractAtAddress(CONTRACT_ADDRESS);

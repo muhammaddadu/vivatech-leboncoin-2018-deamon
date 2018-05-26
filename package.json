@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/muhammaddadu/vivatech-leboncoin-2018-deamon#readme",
   "dependencies": {
+    "async": "^2.6.1",
     "solc": "^0.4.24",
     "web3": "^0.20.1"
   }
