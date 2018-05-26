@@ -52,7 +52,7 @@ contract Box {
     status = state.LOCKED;
   }
 
-  // unlock the box for your deal
+  // unlock the box
   function release() public {
     // check status
     require(status == state.LOCKED);
