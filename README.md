@@ -1,12 +1,12 @@
-# Vivatech LebonCoin 2017 Deamon
-> Deamon that watches a smart contract and executes an IOT command
+# Vivatech LebonCoin 2018 Deamon
+> Deamon that watches a smart contract and executes IoT commands
 
 ## Requirements
 
-- Raspberry PI
+- Raspberry Pi
 - Servo
 - Raspbian OS
-- Node
+- Node.js
 
 ## Deployment
 
@@ -17,3 +17,7 @@
 5) Autostart deamon on starup `pm2 startup`
 
 Note: you will have to compile the contracts on an OS that is not linux due to it not supporting solc.
+
+## Testing
+
+The smart contracts in solidity are bundled with tests. You can run them with [Truffle](http://truffleframework.com).
