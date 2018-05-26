@@ -8,22 +8,13 @@ const NODE_PUBLIC_KEY = '0xA7387feCcA51130A0F117C9cEec18287390E2bF2';
 
 const piblaster = require('pi-blaster.js');
 
-// const solc = require('solc');
+
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
-
-// const BoxSource = fs.readFileSync(path.join(__dirname, 'smartcontracts/Box.sol'), 'utf8');
-// const BoxCompiled = solc.compile({
-//     sources: {
-//         'BoxSource.sol': BoxSource
-//     }
-// }, 1).contracts['BoxSource.sol:Box'];
 const BoxCompiled = require('./smartcontracts/Box.compiled.json');
 const Contract = web3.eth.contract(JSON.parse(BoxCompiled.interface));
 
 const myContract = Contract.at(CONTRACT_ADDRESS);
-
-fs.writeFileSync(path.join(__dirname, 'smartcontracts/Box.compiled.json'), JSON.stringify(BoxCompiled));
 
 var shouldRun = true;
 
