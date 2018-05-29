@@ -1,13 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const async = require('async');
+const { exec } = require('child_process');
 const WEB3_PROVIDER = 'https://ropsten.infura.io/';
 const CONTRACT_ADDRESS = '0xc789bc784db54ef91a0d3e051986f61e3367a57a';
 const NODE_PRIVATE_KEY = '588bab92cce6d95af7207b248f799907849e86dbe00f27a6870aa6a47430b5ed';
 const NODE_PUBLIC_KEY = '0xA7387feCcA51130A0F117C9cEec18287390E2bF2';
-
-const piblaster = require('pi-blaster.js');
-
 
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
@@ -18,6 +16,21 @@ const myContract = Contract.at(CONTRACT_ADDRESS);
 
 var shouldRun = true;
 var lockStatus = false;
+
+function triggerServo(action) {
+    if (['open', 'close'].indexOf(action) === -1) {
+        return Promise.reject('please send valid action');
+    }
+
+    return new Promise((resolve, reject) => {
+        exec(`/home/pi/servosix/python/examples/${action}.py`, (err, stdout, stderr) => {
+            if (err) { return reject(err); }
+            if (stderr) { return reject(stderr); }
+
+            return resolve(stdout);
+        });
+    });
+}
 
 function watchContractAtAddress() {
     let contractFields = ['owner', 'pricePerDay', 'lat', 'long', 'productContract', 'getStatus'];
@@ -40,27 +53,19 @@ function watchContractAtAddress() {
         }, 1000);
 
         let data = JSON.parse(JSON.stringify(_data));
+        let action = data.getStatus === '0' ? 'open' : 'close';
         console.log(data);
 
-        switch (data.getStatus) {
-            case '0': // AVAILABLE
-            case '2': // UNLOCKED
-                if (lockStatus !== 'unlocked') {
-                    piblaster.setPwm(17, 0.05);
-                    lockStatus = 'unlocked';
-                }
-                break;
-            case '1': // Locked
-                if (lockStatus !== 'locked') {
-                    piblaster.setPwm(17, 0.145);
-                    lockStatus = 'locked';
-                }
-                break;
-        }
 
-        setTimeout(() => {
+        triggerServo(action)
+        .then((output) => {
+            console.log(output);
             shouldRun = true;
-        }, 1000);
+        })
+        .catch((output) => {
+            console.log(output);
+            shouldRun = true;
+        });
     });
 }
 
@@ -70,5 +75,3 @@ setInterval(() => {
         watchContractAtAddress();
     }
 }, 2000);
-
-process.stdin.resume();
