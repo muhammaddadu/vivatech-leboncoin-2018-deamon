@@ -23,7 +23,7 @@ function triggerServo(action) {
     }
 
     return new Promise((resolve, reject) => {
-        exec(`/home/pi/servosix/python/examples/${action}.py`, (err, stdout, stderr) => {
+        exec(`python /home/pi/servosix/python/examples/${action}.py`, (err, stdout, stderr) => {
             if (err) { return reject(err); }
             if (stderr) { return reject(stderr); }
 
